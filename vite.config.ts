@@ -12,7 +12,6 @@ export default defineConfig({
     rollupOptions: {
       input: {
         pet: resolve(__dirname, "src/renderer/pet/index.html"),
-        popover: resolve(__dirname, "src/renderer/popover/index.html"),
       },
       output: {
         entryFileNames: "[name].js",
