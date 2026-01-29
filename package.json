@@ -1,0 +1,74 @@
+{
+  "name": "desktop-tamagotchi-buddy",
+  "version": "1.0.0",
+  "description": "A desktop pet that lives on your screen",
+  "main": "dist/main/main.js",
+  "scripts": {
+    "dev": "concurrently \"bun run dev:main\" \"bun run dev:renderer\"",
+    "dev:main": "bun run tsc -p tsconfig.main.json && electron .",
+    "dev:renderer": "bun run vite",
+    "build": "bun run tsc -p tsconfig.main.json && bun run vite build",
+    "build:win": "bun run build && electron-builder --win --dir",
+    "build:win:exe": "bun run build && electron-builder --win",
+    "build:mac": "bun run build && electron-builder --mac",
+    "start": "electron .",
+    "package": "electron-builder",
+    "clean": "rimraf dist release"
+  },
+  "dependencies": {
+    "electron-store": "^8.1.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.10.0",
+    "@types/react": "^18.2.0",
+    "@types/react-dom": "^18.2.0",
+    "@vitejs/plugin-react": "^4.2.0",
+    "concurrently": "^8.2.0",
+    "electron": "^28.0.0",
+    "electron-builder": "^24.9.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "rimraf": "^5.0.0",
+    "typescript": "^5.3.0",
+    "vite": "^5.0.0"
+  },
+  "build": {
+    "appId": "com.tamagotchi.buddy",
+    "productName": "Tamo",
+    "files": [
+      "dist/**/*",
+      "assets/**/*",
+      "sprites/**/*",
+      "package.json"
+    ],
+    "extraResources": [
+      {
+        "from": "sprites",
+        "to": "sprites"
+      }
+    ],
+    "directories": {
+      "output": "dist-release",
+      "buildResources": "assets"
+    },
+    "win": {
+      "target": [
+        {
+          "target": "portable",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
+      "signAndEditExecutable": false,
+      "icon": "assets/icon.ico"
+    },
+    "mac": {
+      "target": "dmg",
+      "icon": "assets/icon.icns"
+    },
+    "portable": {
+      "artifactName": "Tamo.exe"
+    }
+  }
+}
