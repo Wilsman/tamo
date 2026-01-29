@@ -52,15 +52,36 @@ export function PetApp() {
       if (oldState) {
         // Hunger dropped to critical
         if (oldState.hunger > 1 && data.petState.hunger <= 1) {
-          showBark("Feed me please? 🥺");
+          const hungerBarks = [
+            "Feed me please? 🥺",
+            "Tummy empty! Need noms!",
+            "Food emergency! 🚨",
+            "My bowl is staring at me...",
+            "Snack attack! 🍖",
+          ];
+          showBark(hungerBarks[Math.floor(Math.random() * hungerBarks.length)]);
         }
         // Got sick
         else if (!oldState.isSick && data.petState.isSick) {
-          showBark("I don't feel so good... 🤒");
+          const sickBarks = [
+            "I don't feel so good... 🤒",
+            "Tummy hurts... help?",
+            "I'm a sick pup... 😢",
+            "Medicine please? 🏥",
+            "Not feeling paw-some...",
+          ];
+          showBark(sickBarks[Math.floor(Math.random() * sickBarks.length)]);
         }
         // Poop appeared
         else if (oldState.poopCount === 0 && data.petState.poopCount > 0) {
-          showBark("Um... I made a oopsie 💩");
+          const poopBarks = [
+            "Um... I made a oopsie 💩",
+            "Cleanup on aisle 5!",
+            "Nature called! 🌿",
+            "*shameful woof*",
+            "It was an accident! 🙈",
+          ];
+          showBark(poopBarks[Math.floor(Math.random() * poopBarks.length)]);
         }
         // Attention needed
         else if (!oldState.attention && data.petState.attention) {
@@ -68,6 +89,9 @@ export function PetApp() {
             "Hello? Hello! 📢",
             "Notice me!",
             "I need attention!",
+            "Emergency: Boredom! 🚨",
+            "Pet me human! 🥺",
+            "Look at me! I'm cute!",
           ];
           showBark(
             attentionBarks[Math.floor(Math.random() * attentionBarks.length)],
@@ -75,7 +99,14 @@ export function PetApp() {
         }
         // Evolved!
         else if (oldState.stage !== data.petState.stage) {
-          showBark("I grew! Look at me! 🎉");
+          const evolveBarks = [
+            "I grew! Look at me! 🎉",
+            "Evolution complete! 🦋",
+            "I'm bigger now! 📏",
+            "Level up! 🆙",
+            "New me just dropped! ✨",
+          ];
+          showBark(evolveBarks[Math.floor(Math.random() * evolveBarks.length)]);
         }
       }
     });
@@ -88,9 +119,33 @@ export function PetApp() {
   }, [petState, showBark]);
 
   const handleClick = () => {
-    // Show "bork bork" when clicking the doggo
+    // Random cute response when clicking the doggo
     if (petState && !petState.sleeping) {
-      showBark("bork bork");
+      const clickResponses = [
+        "bork bork",
+        "Hey! That tickles! 😄",
+        "*happy wiggle*",
+        "More clicks please! 🖱️",
+        "You found me! 🎯",
+        "Click click hooray!",
+        "That felt nice! 💕",
+        "*spinning in joy*",
+        "You're fun! 🎉",
+        "Best game ever!",
+        "Do it again! Do it again!",
+        "*tail wags furiously*",
+        "Click me, I'm famous! 📸",
+        "Virtual pets are the best!",
+        "You make my day! ☀️",
+        "Keep clicking, I love it!",
+        "*boops screen*",
+        "Hello friend! 👋",
+        "Click click bark! 🐕",
+        "That was delightful! ✨",
+      ];
+      showBark(
+        clickResponses[Math.floor(Math.random() * clickResponses.length)],
+      );
     }
   };
 
