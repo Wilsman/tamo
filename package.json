@@ -11,6 +11,7 @@
     "build:win": "bun run build && electron-builder --win --dir",
     "build:win:exe": "bun run build && electron-builder --win",
     "build:mac": "bun run build && electron-builder --mac",
+    "release": "bun run build && bunx electron-builder --publish always",
     "start": "electron .",
     "package": "electron-builder",
     "clean": "rimraf dist release"
@@ -64,11 +65,23 @@
       "icon": "assets/icon.ico"
     },
     "mac": {
-      "target": "dmg",
+      "target": [
+        {
+          "target": "dmg",
+          "arch": [
+            "universal"
+          ]
+        }
+      ],
       "icon": "assets/icon.icns"
     },
     "portable": {
       "artifactName": "Tamo.exe"
-    }
+    },
+    "publish": [
+      {
+        "provider": "github"
+      }
+    ]
   }
 }

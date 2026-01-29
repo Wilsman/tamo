@@ -44,6 +44,16 @@ bun run build:win:exe
 bun run build:mac
 ```
 
+### Releasing (GitHub Actions)
+
+```bash
+# Create and push a version tag
+git tag v1.0.0
+git push origin v1.0.0
+```
+
+The GitHub Actions workflow builds Windows and macOS artifacts and uploads them to the GitHub Release.
+
 ## 🎮 How to Play
 
 1. **Launch** the app - your pet starts as an egg

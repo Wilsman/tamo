@@ -85,14 +85,8 @@ function getRandomTarget(workArea: {
     workArea.x +
     margin +
     Math.random() * (workArea.width - PET_SIZE - margin * 2);
-  // Keep pet mostly at bottom of screen for more horizontal movement
-  const yRange = (workArea.height - TOTAL_HEIGHT - margin * 2) * 0.35;
-  const y =
-    workArea.y +
-    workArea.height -
-    TOTAL_HEIGHT -
-    margin -
-    Math.random() * yRange;
+  // Lock pet to bottom edge of screen
+  const y = workArea.y + workArea.height - TOTAL_HEIGHT - 5;
   return { x, y };
 }
 
@@ -136,8 +130,8 @@ export function updateMovement(
   const workArea = display.workArea;
   const minX = workArea.x + 20;
   const maxX = workArea.x + workArea.width - PET_SIZE - 20;
-  const minY = workArea.y + 20;
-  const maxY = workArea.y + workArea.height - TOTAL_HEIGHT - 20;
+  const minY = workArea.y + workArea.height - TOTAL_HEIGHT - 10;
+  const maxY = workArea.y + workArea.height - TOTAL_HEIGHT;
 
   let {
     position,
@@ -215,15 +209,13 @@ export function updateMovement(
   let newX = position.x;
   let newY = position.y;
 
-  // Move horizontally
+  // Move horizontally only - pet stays at bottom
   if (Math.abs(dx) >= velocity) {
     newX += (dx / distance) * velocity;
   }
 
-  // Move vertically
-  if (Math.abs(dy) >= velocity) {
-    newY += (dy / distance) * velocity;
-  }
+  // Keep Y at bottom position
+  newY = workArea.y + workArea.height - TOTAL_HEIGHT - 5;
 
   // Clamp to screen bounds
   newX = Math.max(minX, Math.min(newX, maxX));
@@ -274,9 +266,6 @@ export function clampPosition(pos: Position): Position {
       workArea.x,
       Math.min(pos.x, workArea.x + workArea.width - PET_SIZE),
     ),
-    y: Math.max(
-      workArea.y,
-      Math.min(pos.y, workArea.y + workArea.height - TOTAL_HEIGHT),
-    ),
+    y: workArea.y + workArea.height - TOTAL_HEIGHT - 5,
   };
 }
