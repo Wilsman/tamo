@@ -1,8 +1,9 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import { SpritePlayer } from "./SpritePlayer";
 import { SpeechBubble } from "./SpeechBubble";
+import { RadialMenu } from "./RadialMenu";
 import { getBarkForState } from "./barks";
-import { PetState, PositionUpdate } from "../types";
+import { PetState, PositionUpdate, ActionType } from "../types";
 
 export function PetApp() {
   const [petState, setPetState] = useState<PetState | null>(null);
@@ -13,6 +14,8 @@ export function PetApp() {
   const [currentBark, setCurrentBark] = useState<string | null>(null);
   const [isShowingBark, setIsShowingBark] = useState(false);
   const barkQueueRef = useRef<string[]>([]);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const wasPausedRef = useRef(false);
 
   // Function to show a bark
   const showBark = useCallback(
@@ -119,33 +122,69 @@ export function PetApp() {
   }, [petState, showBark]);
 
   const handleClick = () => {
-    // Random cute response when clicking the doggo
-    if (petState && !petState.sleeping) {
-      const clickResponses = [
-        "bork bork",
-        "Hey! That tickles! 😄",
-        "*happy wiggle*",
-        "More clicks please! 🖱️",
-        "You found me! 🎯",
-        "Click click hooray!",
-        "That felt nice! 💕",
-        "*spinning in joy*",
-        "You're fun! 🎉",
-        "Best game ever!",
-        "Do it again! Do it again!",
-        "*tail wags furiously*",
-        "Click me, I'm famous! 📸",
-        "Virtual pets are the best!",
-        "You make my day! ☀️",
-        "Keep clicking, I love it!",
-        "*boops screen*",
-        "Hello friend! 👋",
-        "Click click bark! 🐕",
-        "That was delightful! ✨",
-      ];
-      showBark(
-        clickResponses[Math.floor(Math.random() * clickResponses.length)],
-      );
+    if (petState && !isMenuOpen) {
+      // Store current pause state and pause the pet
+      wasPausedRef.current = petState.sleeping;
+      window.electronAPI.pause(true);
+      setIsMenuOpen(true);
+    }
+  };
+
+  const handleMenuClose = () => {
+    setIsMenuOpen(false);
+    // Resume pet movement if it wasn't paused before
+    if (!wasPausedRef.current) {
+      window.electronAPI.pause(false);
+    }
+  };
+
+  const handleMenuAction = (action: string) => {
+    if (!petState) return;
+
+    switch (action) {
+      case "pet":
+        // Pet the doggo
+        const pettingResponses = [
+          "*purrs happily* 🥰",
+          "That feels so nice! 💕",
+          "More pets please! 🖐️",
+          "*tail wags furiously*",
+          "You're the best! 🌟",
+          "I love being petted! 💖",
+          "*happy doggo noises*",
+          "So cozy! ☺️",
+          "Pet me more! 🐾",
+          "*melts into a puddle of happy*",
+        ];
+        showBark(
+          pettingResponses[Math.floor(Math.random() * pettingResponses.length)],
+        );
+        break;
+      case "feed":
+        window.electronAPI.sendAction("FEED_MEAL");
+        showBark("Yum yum! 🍖");
+        break;
+      case "clean":
+        if (petState.poopCount > 0) {
+          window.electronAPI.sendAction("CLEAN");
+          showBark("All clean! Thanks! ✨");
+        }
+        break;
+      case "medicine":
+        if (petState.isSick) {
+          window.electronAPI.sendAction("MEDICINE");
+          showBark("I feel better already! 💊");
+        }
+        break;
+      case "sleep":
+      case "wake":
+        window.electronAPI.sendAction("LIGHTS_TOGGLE");
+        showBark(action === "sleep" ? "Goodnight! 💤" : "Good morning! ☀️");
+        break;
+      case "stats":
+        const stats = `❤️ ${petState.happiness}/4 🍖 ${petState.hunger}/4`;
+        showBark(stats);
+        break;
     }
   };
 
@@ -207,12 +246,20 @@ export function PetApp() {
         display: "flex",
         alignItems: "flex-end",
         justifyContent: "center",
-        cursor: "pointer",
+        cursor: isMenuOpen ? "default" : "pointer",
         background: "transparent",
         position: "relative",
         paddingBottom: "10px",
       }}
     >
+      {/* Radial Menu */}
+      <RadialMenu
+        isOpen={isMenuOpen}
+        onClose={handleMenuClose}
+        onAction={handleMenuAction}
+        petState={petState}
+      />
+
       {/* Speech Bubble */}
       {currentBark && (
         <SpeechBubble

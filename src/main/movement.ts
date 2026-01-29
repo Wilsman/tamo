@@ -1,7 +1,7 @@
 import { screen } from "electron";
 import { Position, Direction, AppState, DockAnchor } from "./types";
 
-const PET_SIZE = 128;
+const PET_SIZE = 160; // Increased to match window width
 const BUBBLE_SPACE = 80;
 const TOTAL_HEIGHT = PET_SIZE + BUBBLE_SPACE;
 

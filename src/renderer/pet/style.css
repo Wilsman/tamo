@@ -11,7 +11,6 @@ body,
   height: 100%;
   background: transparent !important;
   overflow: hidden;
-  -webkit-app-region: drag;
 }
 
 body {
@@ -23,4 +22,12 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
+  /* Allow clicks to pass through to the pet */
+  -webkit-app-region: no-drag;
+}
+
+/* Allow dragging from the top area (speech bubble space) but not the pet itself */
+html,
+body {
+  -webkit-app-region: drag;
 }

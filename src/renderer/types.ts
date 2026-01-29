@@ -37,12 +37,21 @@ export interface PositionUpdate {
   direction: "left" | "right" | "up" | "down" | "idle";
 }
 
+export type ActionType =
+  | "FEED_MEAL"
+  | "SNACK"
+  | "PLAY"
+  | "CLEAN"
+  | "MEDICINE"
+  | "LIGHTS_TOGGLE"
+  | "DISCIPLINE";
+
 declare global {
   interface Window {
     electronAPI: {
       onStateUpdate: (callback: (data: StateUpdate) => void) => void;
       onPositionUpdate: (callback: (data: PositionUpdate) => void) => void;
-      sendAction: (type: string) => void;
+      sendAction: (type: ActionType) => void;
       setDock: (payload: {
         docked: boolean;
         anchor?: string;

@@ -2,7 +2,7 @@ import { app, BrowserWindow, screen } from "electron";
 import * as path from "path";
 import { Position } from "./types";
 
-const PET_SIZE = 128;
+const PET_SIZE = 160; // Increased to accommodate radial menu
 const BUBBLE_SPACE = 80; // Space for speech bubble above pet
 const TOTAL_PET_HEIGHT = 128 + BUBBLE_SPACE;
 
@@ -23,8 +23,8 @@ export function createPetWindow(): BrowserWindow {
   console.log("Work area:", workArea);
 
   petWindow = new BrowserWindow({
-    width: 128,
-    height: 128 + BUBBLE_SPACE,
+    width: PET_SIZE,
+    height: PET_SIZE + BUBBLE_SPACE,
     x: 100,
     y: 100,
     show: true,
