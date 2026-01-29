@@ -1,6 +1,6 @@
 {
   "name": "desktop-tamagotchi-buddy",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "description": "A desktop pet that lives on your screen",
   "main": "dist/main/main.js",
   "scripts": {
